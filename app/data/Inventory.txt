@@ -1,0 +1,13 @@
+{
+	productId:76,
+	productName:Citrizine,
+	expirDate:22 Jun 2090,
+	batchId:hdd223,
+	productType:medhiuh,
+	manufacture:africa}{
+	productId:7222,
+	productName:Citrizine,
+	expirDate:22 Jun 2090,
+	batchId:hdd223,
+	productType:medhiuh,
+	manufacture:africa}

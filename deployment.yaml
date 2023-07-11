@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: docker-assesment
+  labels:
+    app: docker-assesment   
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: docker-assesment
+  template:
+    metadata:
+      labels:
+        app: docker-assesment
+    spec:
+      containers:
+        - name: docker-assesment
+          image: docker-assesment.jar:15.6
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8083
+          volumeMounts:
+            - name: storage
+              mountPath: app/data
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: pvc-storage-claim
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: docker-assesment
+spec:
+  selector:
+    app: docker-assesment
+  ports:
+    - protocol: "TCP"
+      port: 8083
+      targetPort: 8083
+  type: LoadBalancer
+
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+provisioner: k8s.io/minikube-hostpath
+volumeBindingMode: Immediate
+metadata:
+  name: storage-standard-class
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-storage-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Mi
